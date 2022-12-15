@@ -16,6 +16,8 @@ export interface InfoUser {
   phongBan: string;
   ChucVu: string;
   TenNhanVien: string;
+  name: string;
+  phone: string;
   sdt: string;
   roles: string[];
   exp: number;

@@ -11,7 +11,8 @@ import {setJwt} from 'src/redux/slice/authSlice';
 import {getAPIBaseUrl} from 'src/utils/urls';
 import logo from 'src/assets/images/logoText1.jpg';
 interface FormLogin {
-  email: string;
+  phone: string;
+  password: string;
 }
 export default function LoginPage() {
   const {enqueueSnackbar} = useSnackbar();
@@ -23,21 +24,17 @@ export default function LoginPage() {
 
   const form = useForm<FormLogin>({
     defaultValues: {
-      email: 'nguyenhungvuong1@vietbank.com.vn',
+      phone: '0973092631',
+      password: 'P2t@123123',
     },
   });
 
-  const login = async ({email}: {email: string}) => {
+  const login = async ({phone, password}: {phone: string; password: string}) => {
     try {
-      const res = await axios.post(
-        `${process.env.PUBLIC_URL || '/resolve-problem'}/api/Account/authenticate`,
-        {
-          email: email.trim(),
-          name: 'string',
-          branchCode: 'string',
-          branchName: 'string',
-        }
-      );
+      const res = await axios.post(`${getAPIBaseUrl()}authenticate`, {
+        phone: phone.trim(),
+        password: password,
+      });
       return res.data;
     } catch (err: any) {
       const error = err.response?.data;
@@ -75,13 +72,32 @@ export default function LoginPage() {
         </div>
         <InputField
           form={form}
-          name="email"
-          label="Email"
-          placeholder="nguyenhungvuong1@vietbank.com.vn"
+          name="phone"
+          label="Số điện thoại"
+          placeholder=""
           rules={{
             required: {
               value: true,
-              message: 'Vui lòng nhập email',
+              message: 'Vui lòng nhập số điện thoại',
+            },
+          }}
+          onKeyDown={e => {
+            if (e.nativeEvent.key === 'Enter') {
+              form.handleSubmit(onSubmit)();
+            }
+          }}
+        />
+        <InputField
+          form={form}
+          name="password"
+          label="Mật khẩu"
+          type={'password'}
+          placeholder=""
+          className={'mt-2'}
+          rules={{
+            required: {
+              value: true,
+              message: 'Vui lòng nhập mật khẩu',
             },
           }}
           onKeyDown={e => {

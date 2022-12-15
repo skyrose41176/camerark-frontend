@@ -33,7 +33,7 @@ axiosClient.interceptors.response.use(
   error => {
     if (error.response?.status === 401) {
       sessionStorage.removeItem('token');
-      window.location.href = (process.env.PUBLIC_URL || '/resolve-problem') + '/401';
+      window.location.href = '/401';
     }
     return Promise.reject(error.response?.data);
   }

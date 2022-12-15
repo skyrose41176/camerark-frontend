@@ -110,10 +110,10 @@ export const routes: RouteObject[] = [
     path: '/token/:token',
     element: <TokenPage />,
   },
-  // {
-  //   path: '/login',
-  //   element: <LoginPage />,
-  // },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
   {
     element: (
       <Auth>

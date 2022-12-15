@@ -11,7 +11,17 @@ export const sidebars = (): Sidebar[] => {
     {
       href: '/danh-sach-phieu-yeu-cau',
       icon: TableDocument,
-      title: 'Danh sách phiếu yêu cầu',
+      title: 'Danh sách người dùng',
+    },
+    {
+      href: '/danh-sach-phieu-yeu-cau',
+      icon: TableDocument,
+      title: 'Danh sách sản phẩm',
+    },
+    {
+      href: '/danh-sach-phieu-yeu-cau',
+      icon: TableDocument,
+      title: 'Danh sách giao dịch',
     },
     {
       href: '/tim-kiem',

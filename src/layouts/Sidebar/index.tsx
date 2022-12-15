@@ -54,7 +54,9 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
   const [collapse, setCollapse] = useState(false);
   const [hover, setHover] = useState(true);
   const infoUser = useAppSelector(selectInfoUser);
-  const {TenNhanVien, anhDaiDien, Email, ten, ChucVu, Id} = infoUser;
+  const {name, phone} = infoUser;
+  console.log(infoUser);
+
   const [search, setSearch] = useState('');
   const dispatch = useAppDispatch();
 

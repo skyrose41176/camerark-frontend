@@ -13,7 +13,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <BrowserRouter basename={process.env.PUBLIC_URL || '/resolve-problem'}>
+        <BrowserRouter>
           <App />
         </BrowserRouter>
       </PersistGate>
