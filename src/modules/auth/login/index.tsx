@@ -1,91 +1,104 @@
-import {Button, Card, CardActions, CardContent, Grid, Stack} from '@mui/material';
+import {Card} from '@mui/material';
+import axios from 'axios';
 import {useSnackbar} from 'notistack';
-import {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Navigate, useNavigate} from 'react-router';
-import logo from '../../../assets/images/logo.jpg';
-import {LoadingOverLay} from '../../../components/base';
-import {InputField} from '../../../components/hook-form';
-import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
-import {selectJWT} from '../../../redux/slice/auth';
-import axiosClient from '../../../apis/axiosClient';
-
-interface defaultValues {
-  phoneNumber: string;
+import {useMutation} from 'react-query';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {ButtonBase} from 'src/components/base';
+import {InputField} from 'src/components/hook-form/fields';
+import {useAppDispatch} from 'src/redux/hooks';
+import {setJwt} from 'src/redux/slice/authSlice';
+import {getAPIBaseUrl} from 'src/utils/urls';
+import logo from 'src/assets/images/logoText1.jpg';
+interface FormLogin {
+  email: string;
 }
-const LoginPage = () => {
-  const form = useForm({
-    defaultValues: {
-      phoneNumber: '',
-    },
-  });
-  const {
-    handleSubmit,
-    formState: {isSubmitting},
-  } = form;
-
+export default function LoginPage() {
   const {enqueueSnackbar} = useSnackbar();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-
-  const jwt = useAppSelector(selectJWT);
+  const location = useLocation();
   const dispatch = useAppDispatch();
+  const locationState = location.state as {from?: {pathname?: string}};
+  const from = locationState?.from?.pathname || '/';
 
-  const onSubmit = async (data: defaultValues) => {
-    // console.log(data);
-    // const res = await accountService.login(data.username, data.password);
-    // if (res && res?.data) {
-    //   if (res?.succeeded) {
-    //     const newdata = res?.data;
-    //     localStorage.setItem('jwt', newdata.jwToken);
-    //     dispatch(setJWT(newdata.jwToken));
-    navigate('/');
-    //   }
-    // }
+  const form = useForm<FormLogin>({
+    defaultValues: {
+      email: 'nguyenhungvuong1@vietbank.com.vn',
+    },
+  });
+
+  const login = async ({email}: {email: string}) => {
+    try {
+      const res = await axios.post(
+        `${process.env.PUBLIC_URL || '/resolve-problem'}/api/Account/authenticate`,
+        {
+          email: email.trim(),
+          name: 'string',
+          branchCode: 'string',
+          branchName: 'string',
+        }
+      );
+      return res.data;
+    } catch (err: any) {
+      const error = err.response?.data;
+      enqueueSnackbar(error?.Errors?.[0] || error?.Message || 'Đã xảy ra lỗi', {variant: 'error'});
+    }
   };
-
-  if (jwt) {
-    return <Navigate to="/" />;
-  }
+  const mutationLogin = useMutation(login, {
+    onSuccess: data => {
+      if (data) {
+        dispatch(setJwt(data.token));
+        navigate(from, {replace: true});
+      }
+    },
+  });
+  const onSubmit = (data: any) => {
+    mutationLogin.mutate(data);
+  };
   return (
     <div
-      style={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}
+      className="w-screen h-screen flex justify-center items-center"
+      style={{
+        background: `url('/background.jpg') no-repeat center center`,
+        backgroundSize: 'cover',
+      }}
     >
-      <Card sx={{minWidth: 275, padding: 2}}>
-        <Stack direction="row" justifyContent="center">
-          <img src={logo} alt="logo" width="50%" />
-        </Stack>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <InputField
-                form={form}
-                name="phoneNumber"
-                label="Số điện thoại"
-                rules={{
-                  required: {
-                    value: true,
-                    message: 'Vui lòng nhập số điện thoại',
-                  },
-                }}
-                onKeyPress={(event: any) => {
-                  if (event.key === 'Enter') {
-                    handleSubmit(onSubmit)();
-                  }
-                }}
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <CardActions>
-          <Button variant="contained" fullWidth onClick={handleSubmit(onSubmit)}>
-            Đăng nhập
-          </Button>
-        </CardActions>
+      <Card
+        className="card p-4 w-1/3 min-w-[400px] bg-[rgba(255,255,255,0.5)]"
+        style={{
+          boxShadow: '0px 5px 20px 10px rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(2px)',
+        }}
+      >
+        <div className="flex justify-center mb-8">
+          <img src={logo} alt="logo" className="w-52" />
+        </div>
+        <InputField
+          form={form}
+          name="email"
+          label="Email"
+          placeholder="nguyenhungvuong1@vietbank.com.vn"
+          rules={{
+            required: {
+              value: true,
+              message: 'Vui lòng nhập email',
+            },
+          }}
+          onKeyDown={e => {
+            if (e.nativeEvent.key === 'Enter') {
+              form.handleSubmit(onSubmit)();
+            }
+          }}
+        />
+
+        <div className="mt-4 flex justify-center">
+          <ButtonBase
+            label="Đăng nhập"
+            loading={mutationLogin.isLoading}
+            onClick={form.handleSubmit(onSubmit)}
+          />
+        </div>
       </Card>
-      <LoadingOverLay open={isSubmitting} />
     </div>
   );
-};
-
-export default LoginPage;
+}

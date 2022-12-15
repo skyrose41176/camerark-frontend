@@ -1,49 +1,43 @@
-import {AppBar, IconButton, Stack, Toolbar, Typography} from '@mui/material';
+import {AppBar, AppBarProps, Stack, Toolbar, Typography} from '@mui/material';
 import {ArrowLeft2} from 'iconsax-react';
-
-import React, {FC} from 'react';
+import React from 'react';
 import {useNavigate} from 'react-router-dom';
-import {colors} from '../../theme';
-
-interface Props {
-  title: string;
+import {getTimeFromMins} from 'src/utils/format';
+import {IconButtonBase} from '../../components/base';
+import {COLORS} from '../../constants';
+interface Props extends Omit<AppBarProps, 'title'> {
+  title: React.ReactNode | string;
+  sla?: number | string;
   actions?: any;
 }
-const Header: FC<Props> = props => {
-  const {title, actions} = props;
-  const navigate = useNavigate();
-  return (
-    <AppBar elevation={3} {...props} position="sticky">
-      <Toolbar
-        variant="dense"
-        sx={{
-          backgroundColor: '#fff',
-          display: 'flex',
-          justifyContent: 'space-between',
-          minHeight: '64px',
-        }}
-      >
-        <Stack direction="row" alignItems="center">
-          <IconButton
-            size="small"
-            edge="start"
-            sx={{
-              mr: 2,
-              ml: 0,
-              borderRadius: 1,
-              backgroundColor: colors.primary,
-              '&.MuiIconButton-root:hover': {
-                backgroundColor: colors.primaryDark,
-              },
-            }}
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft2 size="16" color="#fff" />
-          </IconButton>
 
-          <Typography variant="h5">{title}</Typography>
+const Header = (props: Props) => {
+  const {title, sla, actions, ...rest} = props;
+  const navigate = useNavigate();
+  const handleClickGoBack = () => {
+    navigate(-1);
+  };
+
+  return (
+    <AppBar elevation={3} {...rest} position="sticky">
+      <Toolbar variant="dense" className="bg-white flex justify-between min-h-64">
+        <Stack direction="row" alignItems="center" className="box-appbar">
+          <IconButtonBase
+            iconName={ArrowLeft2}
+            hasBackground
+            rounded={false}
+            onClick={handleClickGoBack}
+          />
+          <Typography className="flex" variant="subtitle2" ml={1} color={COLORS.primary}>
+            {title}
+          </Typography>
         </Stack>
         {actions}
+        {sla && (
+          <Typography className="flex" variant="subtitle2" ml={1} color={COLORS.primary}>
+            SLA: {getTimeFromMins(+sla)}
+          </Typography>
+        )}
       </Toolbar>
     </AppBar>
   );

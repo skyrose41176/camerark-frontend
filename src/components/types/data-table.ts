@@ -3,7 +3,7 @@ import React from 'react';
 export interface ColumnTableProps {
   field: string;
   headerName: React.ReactNode;
-  type?: 'text' | number;
+  type?: 'text' | 'number';
   valueGetter?: (row: any, index: number) => void;
   renderCell?: (row: any, index: number) => void;
   center?: boolean;

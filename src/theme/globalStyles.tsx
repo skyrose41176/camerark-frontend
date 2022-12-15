@@ -14,6 +14,7 @@ export default function GlobalStyles() {
           margin: 0,
           padding: 0,
           boxSizing: 'border-box',
+          fontFamily: "'Roboto', sans-serif",
         },
         html: {
           width: '100%',
@@ -23,7 +24,6 @@ export default function GlobalStyles() {
         body: {
           width: '100%',
           height: '100%',
-          backgroundColor: '#f3f6f9',
         },
         '#root': {
           width: '100%',

@@ -14,13 +14,13 @@ export default function Button(theme: any) {
         },
         containedInherit: {
           color: theme.palette.grey[800],
-          boxShadow: theme.customShadows.z8,
+          boxShadow: theme.customShadows.z2,
           '&:hover': {
             backgroundColor: theme.palette.grey[400],
           },
         },
         containedPrimary: {
-          boxShadow: theme.customShadows.primary,
+          boxShadow: theme.customShadows.z2,
         },
         containedSecondary: {
           boxShadow: theme.customShadows.secondary,

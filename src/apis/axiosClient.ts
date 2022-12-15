@@ -1,8 +1,10 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import queryString from 'query-string';
+import store from 'src/redux/store';
+import {getAPIBaseUrl} from 'src/utils/urls';
 
 const axiosClient = axios.create({
-  baseURL: `/api`,
+  baseURL: getAPIBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
@@ -11,15 +13,9 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config: AxiosRequestConfig | any) => {
-    // if (config.url?.indexOf('account') === -1) {
-    //   config.baseURL = `/${process.env.REACT_APP_PREFIX_URL || 'admin-bvb'}/api/v1`;
-    // }
-
-    const token = localStorage.getItem('jwt');
+    const token = store.getState().auth.token;
     if (token) {
-      if (config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -35,12 +31,11 @@ axiosClient.interceptors.response.use(
     return response.data;
   },
   error => {
-    console.log('error', error.response.status);
-    if (error.response.status === 401) {
-      localStorage.removeItem('jwt');
-      window.location.href = '/login';
+    if (error.response?.status === 401) {
+      sessionStorage.removeItem('token');
+      window.location.href = (process.env.PUBLIC_URL || '/resolve-problem') + '/401';
     }
-    return Promise.reject(error.response.data);
+    return Promise.reject(error.response?.data);
   }
 );
 

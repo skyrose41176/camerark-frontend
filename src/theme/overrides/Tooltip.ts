@@ -1,16 +1,14 @@
 // ----------------------------------------------------------------------
 
-import {ThemeOptions} from '@mui/material';
-
-export default function Tooltip(theme: ThemeOptions) {
+export default function Tooltip(theme: any) {
   return {
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: theme?.palette?.grey?.[800],
+          backgroundColor: theme.palette.grey[800],
         },
         arrow: {
-          color: theme?.palette?.grey?.[800],
+          color: theme.palette.grey[800],
         },
       },
     },

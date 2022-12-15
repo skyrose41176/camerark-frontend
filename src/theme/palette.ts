@@ -55,7 +55,7 @@ const INFO = {
 const SUCCESS = {
   lighter: '#E9FCD4',
   light: '#AAF27F',
-  main: '#54D62C',
+  main: '#3bb117',
   dark: '#229A16',
   darker: '#08660D',
   contrastText: GREY[800],
@@ -63,16 +63,24 @@ const SUCCESS = {
 const WARNING = {
   lighter: '#FFF7CD',
   light: '#FFE16A',
-  main: '#FFC107',
-  dark: '#B78103',
+  main: '#f99406',
+  dark: '#ed8a00',
   darker: '#7A4F01',
   contrastText: GREY[800],
 };
 const ERROR = {
   lighter: '#FFE7D9',
   light: '#FFA48D',
-  main: '#FF4842',
-  dark: '#B72136',
+  main: '#f44336',
+  dark: '#e52c1f',
+  darker: '#7A0C2E',
+  contrastText: '#fff',
+};
+const DEFAULT = {
+  lighter: '#FFE7D9',
+  light: '#FFA48D',
+  main: '#999',
+  dark: '#333',
   darker: '#7A0C2E',
   contrastText: '#fff',
 };
@@ -101,6 +109,7 @@ const palette = {
   success: {...SUCCESS},
   warning: {...WARNING},
   error: {...ERROR},
+  default: {...DEFAULT},
   grey: GREY,
   gradients: GRADIENTS,
   chart: CHART_COLORS,

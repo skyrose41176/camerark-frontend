@@ -1,13 +1,14 @@
+import Autocomplete from './Autocomplete';
+import Backdrop from './Backdrop';
+import Button from './Button';
 import Card from './Card';
+import IconButton from './IconButton';
+import Input from './Input';
 import Lists from './Lists';
 import Paper from './Paper';
-import Input from './Input';
-import Button from './Button';
+import Skeleton from './Skeleton';
 import Tooltip from './Tooltip';
-import Backdrop from './Backdrop';
 import Typography from './Typography';
-import IconButton from './IconButton';
-import Autocomplete from './Autocomplete';
 
 // ----------------------------------------------------------------------
 
@@ -23,5 +24,6 @@ export default function ComponentsOverrides(theme: any) {
     ...Typography(theme),
     ...IconButton(theme),
     ...Autocomplete(theme),
+    ...Skeleton(theme),
   };
 }

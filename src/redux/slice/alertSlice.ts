@@ -38,5 +38,3 @@ export const {setHiddenAlert, setShowAlert} = alertSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectAlert = (state: RootState) => state.alert;
-
-export default alertSlice.reducer;

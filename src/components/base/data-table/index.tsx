@@ -1,7 +1,8 @@
-import {Search} from '@mui/icons-material';
+import {ArrowDropDownRounded, ArrowDropUpRounded} from '@mui/icons-material';
 import {
+  Box,
+  Card,
   CircularProgress,
-  Paper,
   Stack,
   Table,
   TableBody,
@@ -10,28 +11,31 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Box,
-  Card,
-  TableRowProps,
-  InputAdornment,
 } from '@mui/material';
-import {height} from '@mui/system';
-import {SearchNormal} from 'iconsax-react';
-import React, {FC, useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {InputField} from '../../hook-form';
-
-interface Column {
-  field: string;
-  headerName: string;
-  type?: 'text' | 'number';
-  valueGetter?: (row: any) => void;
-  renderCell?: (row: any) => void;
-  center?: boolean;
+import React, {FC, useEffect, useRef, useState} from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import {ColumnTableProps} from 'src/components/types';
+import TableRowItem from './table-row-item';
+interface Row {
+  children?: {
+    columns: Array<ColumnTableProps>;
+    rows: Array<Row>;
+    width?: number | string;
+  };
+  [key: string]: any;
+}
+interface Sort {
+  column: string;
+  order: 'asc' | 'desc';
 }
 interface Props {
-  columns: Array<Column>;
-  rows: Array<any>;
+  columns: Array<ColumnTableProps>;
+  rows: Array<Row>;
   height?: number;
+  maxHeight?: number;
+  fixedColumn?: boolean;
+  textAlign?: string;
   pagination?: {
     rowsPerPage: number;
     page: number;
@@ -40,26 +44,37 @@ interface Props {
     totalCount: number;
     show: boolean;
   };
+  onSortChange?: (sort: Sort) => void;
   loading?: boolean;
   onRowClick?: (item: any, index: number) => void;
-  listIndexDuplicates?: any[];
-  formFilter?: any;
+  collapsed?: boolean;
+  caption?: React.ReactNode;
 }
 
 const DataTable: FC<Props> = props => {
+  const [sort, setSort] = useState<Sort>({
+    column: '',
+    order: 'asc',
+  });
+  const [hover, setHover] = useState('');
   const {
     columns,
     rows = [],
-    height,
+    height = 'auto',
+    maxHeight = 'auto',
+
+    fixedColumn = false,
     pagination = {
       show: false,
       page: 0,
       rowsPerPage: 10,
+      totalCount: 0,
     },
     loading = false,
     onRowClick,
-    listIndexDuplicates,
-    formFilter,
+    onSortChange,
+    collapsed = false,
+    caption,
   } = props;
 
   const [heightRow, setHeightRow] = useState(0);
@@ -71,9 +86,8 @@ const DataTable: FC<Props> = props => {
   });
 
   const emptyRows = pagination.page > 0 ? Math.max(0, pagination.rowsPerPage - rows.length) : 0;
-
   return (
-    <Card sx={{boxShadow: 'rgb(145 158 171 / 24%) 0px 1px 2px 0px', position: 'relative'}}>
+    <Card className="boxTable">
       {loading && (
         <Stack
           justifyContent="center"
@@ -88,125 +102,124 @@ const DataTable: FC<Props> = props => {
           <CircularProgress />
         </Stack>
       )}
-      <TableContainer style={{overflowX: 'auto', height: height ? height : 'auto', minWidth: 800}}>
-        <Table sx={{minWidth: 650}} stickyHeader>
-          <TableHead>
-            <TableRow sx={{backgroundColor: 'white'}}>
-              {columns.map((item: Column, index) => (
-                <TableCell
-                  sx={{backgroundColor: 'white'}}
-                  align={item.center ? 'center' : item.type === 'number' ? 'right' : 'left'}
-                  key={index.toString()}
-                >
-                  {item.headerName}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {formFilter && (
-              <TableRow sx={{backgroundColor: 'white'}}>
-                {columns.map((item: Column, index) => (
+      <PerfectScrollbar>
+        <TableContainer className="w-full data-hover" style={{height, maxHeight}}>
+          <Table stickyHeader style={{tableLayout: fixedColumn ? 'fixed' : 'auto'}}>
+            {caption && (
+              <caption
+                style={{
+                  padding: '0.5rem',
+                }}
+              >
+                {caption}
+              </caption>
+            )}
+
+            <TableHead>
+              <TableRow>
+                {rows.findIndex(item => item.children) > -1 && <TableCell width={10} />}
+                {columns.map((item: ColumnTableProps, index) => (
                   <TableCell
-                    sx={{backgroundColor: 'white'}}
+                    className={`${item.field === 'thaoTac' ? 'sticky right-0' : ''}${
+                      item.isSortable ? 'cursor-pointer' : ''
+                    }`}
+                    width={item.field === 'thaoTac' ? item.width ?? 100 : item.width}
+                    sx={{
+                      backgroundColor: 'white',
+                      minWidth: item.minWidth,
+                    }}
                     align={item.center ? 'center' : item.type === 'number' ? 'right' : 'left'}
                     key={index.toString()}
-                  >
-                    <InputField
-                      size="small"
-                      // label={item.headerName}
-                      placeholder={`Nhập ${item.headerName?.toLowerCase()}`}
-                      form={formFilter}
-                      name={item.field}
-                      variant="outlined"
-                      InputLabelProps={{shrink: false}}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Search
-                              sx={{
-                                fontSize: '18px',
-                              }}
-                            />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </TableCell>
-                ))}
-              </TableRow>
-            )}
-            {rows.map((row, index) => (
-              <TableRow
-                ref={index === 0 ? heightRowRef : null}
-                key={index.toString()}
-                sx={{
-                  '&:last-child td, &:last-child th': {border: 0},
-                  cursor: !!onRowClick ? 'pointer' : '',
-                }}
-                onClick={() => onRowClick && onRowClick(row, index)}
-              >
-                {columns.map((item: Column, index: number) => (
-                  <TableCell
-                    key={item.field}
-                    align={item.center ? 'center' : item.type === 'number' ? 'right' : 'left'}
-                    sx={{
-                      borderTop:
-                        listIndexDuplicates && listIndexDuplicates.includes(row?.transactionId)
-                          ? '1px solid red'
-                          : '',
-                      borderBottom:
-                        listIndexDuplicates && listIndexDuplicates.includes(row?.transactionId)
-                          ? '1px  solid red'
-                          : '',
-                      borderLeft:
-                        listIndexDuplicates &&
-                        listIndexDuplicates.includes(row?.transactionId) &&
-                        index === 0
-                          ? '1px solid red'
-                          : '',
-                      borderRight:
-                        listIndexDuplicates &&
-                        listIndexDuplicates.includes(row?.transactionId) &&
-                        index === columns.length - 1
-                          ? '1px solid red'
-                          : '',
+                    onClick={() => {
+                      const sortChange: Sort = {
+                        order: sort.order === 'asc' && item.field === sort.column ? 'desc' : 'asc',
+                        column: item.field,
+                      };
+                      if (item.isSortable) {
+                        setSort(sortChange);
+                        onSortChange && onSortChange(sortChange);
+                      }
+                    }}
+                    onMouseEnter={() => {
+                      setHover(item.field);
+                    }}
+                    onMouseLeave={() => {
+                      setHover('');
                     }}
                   >
-                    {item.renderCell
-                      ? item.renderCell(row)
-                      : item.valueGetter
-                      ? item?.valueGetter(row)
-                      : row[item.field]}
+                    <Box className="relative">
+                      {item.headerName}
+                      {item.isSortable && (sort.column === item.field || hover === item.field) && (
+                        <Stack className="absolute top-0 right-8px">
+                          {sort.order === 'asc' ? (
+                            <ArrowDropUpRounded sx={{fontSize: '24px'}} />
+                          ) : (
+                            <ArrowDropDownRounded sx={{fontSize: '24px'}} />
+                          )}
+                        </Stack>
+                      )}
+                    </Box>
                   </TableCell>
                 ))}
               </TableRow>
-            ))}
-            {emptyRows > 0 && (
-              <TableRow style={{height: heightRow * emptyRows}}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {rows?.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={columns.length}>
+                    <Box
+                      sx={{
+                        textAlign: 'center',
+                        fontSize: '0.8rem',
+                        fontWeight: 'bold',
+                        color: '#999',
+                      }}
+                    >
+                      Không có dữ liệu
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              )}
+
+              {rows.map((row, index) => (
+                <TableRowItem
+                  key={index}
+                  row={row}
+                  index={index}
+                  columns={columns}
+                  heightRowRef={index === 0 ? heightRowRef : null}
+                  onRowClick={onRowClick}
+                  collapsed={collapsed}
+                />
+              ))}
+              {emptyRows > 0 && (
+                <TableRow style={{height: heightRow * emptyRows}}>
+                  <TableCell colSpan={columns.length} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </PerfectScrollbar>
       {pagination.show && (
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100, 200, 500, 1000]}
           component="div"
           count={pagination.totalCount}
           rowsPerPage={pagination.rowsPerPage}
           page={pagination.page}
           labelDisplayedRows={({from, to, count}) =>
-            `${from}–${to} trong ${count !== -1 ? count : `nhiều hơn ${to}`}`
+            `${from}-${to} trong ${count !== -1 ? count : `nhiều hơn ${to}`}`
           }
           labelRowsPerPage="Số hàng mỗi trang"
           onPageChange={(e, page) => pagination.onPageChange?.(page)}
           onRowsPerPageChange={({target: {value}}) => pagination.onRowsPerPageChange?.(value)}
+          showLastButton
+          showFirstButton
         />
       )}
     </Card>
   );
 };
 
-export default DataTable;
+export default React.memo(DataTable);

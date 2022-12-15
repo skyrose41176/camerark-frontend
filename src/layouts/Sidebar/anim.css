@@ -1,0 +1,22 @@
+.expandAnim:hover {
+  animation: rightToLeft 900ms ease infinite;
+}
+.collapseAnim:hover {
+  animation: leftToRight 900ms ease infinite;
+}
+@keyframes rightToLeft {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(10px);
+  }
+}
+@keyframes leftToRight {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-10px);
+  }
+}

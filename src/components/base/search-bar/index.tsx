@@ -1,14 +1,15 @@
 import {Card, InputBase} from '@mui/material';
-import {SearchNormal1} from 'iconsax-react';
+import {SearchNormal} from 'iconsax-react';
 import React, {FC, useRef, useState} from 'react';
 
 interface Props {
   placeholder?: string;
   onSubmit: (value: string) => void;
   width?: number | string;
+  sx?: any;
 }
 const SearchBar: FC<Props> = props => {
-  const {placeholder = 'Vui lòng nhập từ khóa', onSubmit, width = 220} = props;
+  const {placeholder = 'Vui lòng nhập từ khóa', onSubmit, width = 300, sx = {}} = props;
   const [search, setSearch] = useState('');
   const typingRef = useRef<any>();
 
@@ -32,6 +33,7 @@ const SearchBar: FC<Props> = props => {
         borderRadius: '4px',
         border: '1px solid #eeeeee',
         boxShadow: 'none',
+        ...sx,
         // boxShadow: 'rgb(145 158 171 / 24%) 0px 1px 2px 0px',
       }}
     >
@@ -41,7 +43,7 @@ const SearchBar: FC<Props> = props => {
         value={search}
         onChange={({target: {value}}) => handleSearchDebounce(value)}
       />
-      <SearchNormal1 color="#555" size={16} />
+      <SearchNormal color="#555" size={16} />
     </Card>
   );
 };

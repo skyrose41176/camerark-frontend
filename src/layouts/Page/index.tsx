@@ -1,7 +1,7 @@
 import React, {FC, ReactNode} from 'react';
 import Header from '../Header';
 import {styled} from '@mui/material/styles';
-import {Container} from '@mui/material';
+import {Box} from '@mui/material';
 
 interface PageProps {
   children: ReactNode;
@@ -24,13 +24,13 @@ const MainStyle = styled('div')(({theme}) => ({
   },
 }));
 
-const Page: FC<PageProps> = ({title, children}) => {
+const PageContainer: FC<PageProps> = ({title, children}) => {
   return (
     <>
       <Header title={title} />
-      <MainStyle>{children}</MainStyle>
+      <Box sx={{px: '24px', py: '16px'}}>{children}</Box>
     </>
   );
 };
 
-export default Page;
+export default PageContainer;
