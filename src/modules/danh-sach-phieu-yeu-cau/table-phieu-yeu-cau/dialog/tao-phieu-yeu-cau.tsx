@@ -2,10 +2,9 @@ import {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {DialogBase} from 'src/components/base';
 import {DinhKemField, InputField, RadioGroupField} from 'src/components/hook-form/fields';
-import LoaiNghiepVuField from 'src/components/hook-form/loai-nghiep-vu-field';
+// import LoaiNghiepVuField from 'src/components/hook-form/loai-nghiep-vu-field';
 import LoaiYeuCauField from 'src/components/hook-form/loai-yeu-cau-field';
 import FieldLayout from 'src/layouts/FieldLayout';
-import DialogXemTruoc from './xem-truoc';
 
 interface Props {
   open: boolean;
@@ -52,7 +51,7 @@ const DialogTaoPhieuYeuCau = ({open, onClose}: Props) => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <FieldLayout xs={12} md={12} lg={12} xl={12}>
-          <LoaiNghiepVuField form={form} required valueTypeSelectObject />
+          {/* <LoaiNghiepVuField form={form} required valueTypeSelectObject /> */}
           <LoaiYeuCauField form={form} required valueTypeSelectObject />
           <FieldLayout xs={12} md={12} lg={12} xl={12} className="box-fieldset-full">
             <RadioGroupField
@@ -96,16 +95,6 @@ const DialogTaoPhieuYeuCau = ({open, onClose}: Props) => {
           <DinhKemField form={form} label="Tài liệu đính kèm" name="dinhKems" />
         </FieldLayout>
       </DialogBase>
-      {showDialogXemTruoc?.open && (
-        <DialogXemTruoc
-          open={showDialogXemTruoc?.open}
-          form={form}
-          onClose={() => {
-            setShowDialogXemTruoc({open: false});
-          }}
-          onCloseTaoPhieuYeuCau={onClose}
-        />
-      )}
     </>
   );
 };

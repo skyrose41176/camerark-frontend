@@ -18,6 +18,7 @@ export interface InfoUser {
   TenNhanVien: string;
   name: string;
   phone: string;
+  user: any;
   sdt: string;
   roles: string[];
   exp: number;
@@ -55,6 +56,9 @@ const initialState = {
     aud: '',
     anhDaiDien: '',
     tdv: null,
+    name: '',
+    phone: '',
+    user: null,
   },
 } as Auth;
 

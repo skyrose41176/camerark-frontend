@@ -54,21 +54,10 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
   const [collapse, setCollapse] = useState(false);
   const [hover, setHover] = useState(true);
   const infoUser = useAppSelector(selectInfoUser);
-  const {name, phone} = infoUser;
+  const {user} = infoUser;
   console.log(infoUser);
 
   const [search, setSearch] = useState('');
-  const dispatch = useAppDispatch();
-
-  const {isLoading} = useGetOneNhanSu(Id, data => {
-    dispatch(
-      setInfoUser({
-        ...infoUser,
-        ...data,
-        // roles: Array.isArray(data.roles) ? data.roles : data.roles ? [data.roles] : [],
-      })
-    );
-  });
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -137,11 +126,11 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
             {true ? (
               <Avatar
                 onClick={() => navigate('/thong-tin-ca-nhan')}
-                sx={{backgroundColor: avatar.getColor(TenNhanVien)}}
+                sx={{backgroundColor: avatar.getColor(user.name)}}
                 className={`border-2 border-solid border-[#ececec] font-bold text-base cursor-pointer`}
-                src={anhDaiDien}
+                src={user.name}
               >
-                {avatar.generateName(TenNhanVien)}
+                {avatar.generateName(user.name)}
               </Avatar>
             ) : (
               <Skeleton
@@ -154,9 +143,9 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
             )}
             {(hover || !collapse) && (
               <>
-                {TenNhanVien ? (
+                {user.name ? (
                   <Typography variant="body2" color="#fff" marginTop={1} textAlign="center">
-                    {TenNhanVien}
+                    {user.name}
                   </Typography>
                 ) : (
                   <Skeleton
@@ -167,7 +156,7 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
                     animation="wave"
                   />
                 )}
-                {ChucVu ? (
+                {user.phone ? (
                   <Typography
                     variant="caption"
                     component="p"
@@ -175,7 +164,7 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
                     marginTop={1}
                     textAlign="center"
                   >
-                    {ChucVu}
+                    {user.phone}
                   </Typography>
                 ) : (
                   <Skeleton

@@ -1,13 +1,10 @@
-import {NhanSu} from '../models';
+import {User} from '../models';
 
-export const renderInfoUser = (dataNhanSu: NhanSu) => {
+export const renderInfoUser = (dataNhanSu: User) => {
   return (
     <>
-      <p>Mã nhân sự: {dataNhanSu.maNs}</p>
-      <p>Tên nhân sự: {dataNhanSu.ten}</p>
-      <p>Email: {dataNhanSu.email}</p>
-      <p>Chức vụ: {dataNhanSu.chucVu}</p>
-      <p>Đơn vị: {dataNhanSu.donVi}</p>
+      <p>Tên: {dataNhanSu.name}</p>
+      <p>Số điện thoại: {dataNhanSu.phone}</p>
     </>
   );
 };

@@ -12,20 +12,19 @@ import {
 } from 'react-router-dom';
 import Loading from 'src/components/loading';
 import {pageNoneAuth} from 'src/constants/pageNoneAuth';
-import ThongTinCaNhanPage from 'src/modules/thong-tin-ca-nhan';
-import DanhSachNhanSuPage from 'src/modules/quan-ly/nhan-su';
+// import DanhSachNhanSuPage from 'src/modules/quan-ly/nhan-su';
 
 import {selectInfoUser, selectJWT, setJwt} from 'src/redux/slice/authSlice';
 import {NotFound} from '../components';
-import ThongTinChiTietPage from '../modules/danh-sach-phieu-yeu-cau/chi-tiet-ho-so';
+// import ThongTinChiTietPage from '../modules/danh-sach-phieu-yeu-cau/chi-tiet-ho-so';
 import {useAppDispatch} from '../redux/hooks';
 const MainLayout = lazy(() => import('../layouts'));
 
 const DanhSachPhieuYeuCau = lazy(() => import('src/modules/danh-sach-phieu-yeu-cau'));
-const LoaiNghiepVu = lazy(() => import('src/modules/quan-ly/loai-nghiep-vu'));
-const LoaiYeuCau = lazy(() => import('src/modules/quan-ly/loai-yeu-cau'));
-const BoPhan = lazy(() => import('src/modules/quan-ly/bo-phan'));
-const TimKiem = lazy(() => import('src/modules/tim-kiem-phieu-yeu-cau'));
+// const LoaiNghiepVu = lazy(() => import('src/modules/quan-ly/loai-nghiep-vu'));
+// const LoaiYeuCau = lazy(() => import('src/modules/quan-ly/loai-yeu-cau'));
+// const BoPhan = lazy(() => import('src/modules/quan-ly/bo-phan'));
+// const TimKiem = lazy(() => import('src/modules/tim-kiem-phieu-yeu-cau'));
 const LoginPage = lazy(() => import('src/modules/auth/login'));
 
 interface AuthProps {
@@ -121,10 +120,10 @@ export const routes: RouteObject[] = [
       </Auth>
     ),
     children: [
-      {
-        path: 'thong-tin-ca-nhan',
-        element: <ThongTinCaNhanPage />,
-      },
+      // {
+      //   path: 'thong-tin-ca-nhan',
+      //   element: <ThongTinCaNhanPage />,
+      // },
       {
         path: 'danh-sach-phieu-yeu-cau',
         element: <Outlet />,
@@ -146,35 +145,35 @@ export const routes: RouteObject[] = [
           },
         ],
       },
-      {
-        path: 'tim-kiem',
-        element: <TimKiem />,
-      },
-      {
-        path: 'quan-ly',
-        children: [
-          {
-            path: 'loai-nghiep-vu',
-            element: <LoaiNghiepVu />,
-          },
-          {
-            path: 'loai-yeu-cau',
-            element: <LoaiYeuCau />,
-          },
-          {
-            path: 'bo-phan',
-            element: <BoPhan />,
-          },
-          {
-            path: 'danh-sach-nhan-su',
-            element: <DanhSachNhanSuPage />,
-          },
-        ],
-      },
-      {
-        path: 'chi-tiet-ho-so/:idHoSo',
-        element: <ThongTinChiTietPage />,
-      },
+      // {
+      //   path: 'tim-kiem',
+      //   element: <TimKiem />,
+      // },
+      // {
+      //   path: 'quan-ly',
+      //   children: [
+      //     {
+      //       path: 'loai-nghiep-vu',
+      //       element: <LoaiNghiepVu />,
+      //     },
+      //     {
+      //       path: 'loai-yeu-cau',
+      //       element: <LoaiYeuCau />,
+      //     },
+      //     {
+      //       path: 'bo-phan',
+      //       element: <BoPhan />,
+      //     },
+      //     {
+      //       path: 'danh-sach-nhan-su',
+      //       element: <DanhSachNhanSuPage />,
+      //     },
+      //   ],
+      // },
+      // {
+      //   path: 'chi-tiet-ho-so/:idHoSo',
+      //   element: <ThongTinChiTietPage />,
+      // },
     ],
   },
 

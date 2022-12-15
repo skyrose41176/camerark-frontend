@@ -1,33 +1,40 @@
 import {useContext, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {useDeletePhieuYeuCau, useGetAllPhieuYeuCau} from 'src/apis';
-import {DataTable, DialogConfirm, LoadingSkeleton, NoData} from 'src/components/base';
+import {useDeleteProduct, useGetAllProduct} from 'src/apis';
+import {
+  DataTable,
+  DialogConfirm,
+  IconButtonBase,
+  LoadingSkeleton,
+  NoData,
+} from 'src/components/base';
 import {ColumnTableProps} from 'src/components/types';
 import {PathParams, QueryParams} from 'src/models/common';
 import {colors} from 'src/theme';
 import {formatDatetimeDDMMYYYY} from 'src/utils/format';
-import {PhieuYeuCauContext} from '..';
-import {PhieuYeuCau} from 'src/models';
+import {ProductContext} from '..';
+import {Product} from 'src/models';
+import {Box} from '@mui/material';
+import {Edit, Trash} from 'iconsax-react';
 
-const TablePhieuYeuCau = () => {
+const TableProduct = () => {
   const {screen = 'tat-ca', subScreen = ''} = useParams<PathParams>();
   const navigate = useNavigate();
-  const search = useContext(PhieuYeuCauContext);
-  const [filters, setFilters] = useState<QueryParams & {screen: string; subScreen?: string}>({
+  const search = useContext(ProductContext);
+  const [filters, setFilters] = useState<QueryParams>({
     pageNumber: 1,
     pageSize: 10,
     search: '',
-    screen: screen,
-    subScreen: subScreen,
   });
 
-  const {data, isLoading, isFetching} = useGetAllPhieuYeuCau({...filters, search});
-  const [showDialog, setShowDialog] = useState<{open: boolean; data?: PhieuYeuCau | null}>({
+  const {data, isLoading, isFetching} = useGetAllProduct({...filters, search});
+
+  const [showDialog, setShowDialog] = useState<{open: boolean; data?: Product | null}>({
     open: false,
     data: null,
   });
 
-  const mutationDelete = useDeletePhieuYeuCau();
+  const mutationDelete = useDeleteProduct();
 
   const columns: ColumnTableProps[] = [
     {
@@ -38,16 +45,21 @@ const TablePhieuYeuCau = () => {
       renderCell: (row, index) =>
         (Number(filters?.pageNumber) - 1) * Number(filters?.pageSize) + (index + 1),
     },
-    {field: 'id', headerName: 'Mã yêu cầu', type: 'text', width: '100px', isSortable: true},
+    {field: '_id', headerName: 'Mã', type: 'text', width: '200px'},
     {
-      field: 'loaiYeuCau',
-      headerName: 'Loại yêu cầu',
+      field: 'name',
+      headerName: 'Tên sản phẩm',
       type: 'text',
       width: '200px',
-      isSortable: true,
     },
     {
-      field: 'created',
+      field: 'brand',
+      headerName: 'Nhãn hiệu',
+      type: 'text',
+      width: '200px',
+    },
+    {
+      field: 'createdAt',
       headerName: 'Ngày tạo',
       type: 'text',
       width: '100px',
@@ -55,28 +67,15 @@ const TablePhieuYeuCau = () => {
       renderCell: row => formatDatetimeDDMMYYYY(row?.created),
     },
     {
-      field: 'tenDonVi',
-      headerName: 'Tên đơn vị',
+      field: 'updatedAt',
+      headerName: 'Ngày cập nhật',
       type: 'text',
-      width: '160px',
+      width: '100px',
       isSortable: true,
+      renderCell: row => formatDatetimeDDMMYYYY(row?.created),
     },
     {
-      field: 'nhanSuCreate.ten',
-      headerName: 'Người tạo',
-      type: 'text',
-      center: true,
-      width: '140px',
-    },
-    {
-      field: 'nhanSuTdv.ten',
-      headerName: 'Trưởng đơn vị',
-      type: 'text',
-      width: '200px',
-      center: true,
-    },
-    {
-      field: 'trangThaiPhu',
+      field: 'status',
       headerName: 'Trạng thái',
       type: 'text',
       width: '140px',
@@ -89,33 +88,37 @@ const TablePhieuYeuCau = () => {
           <p style={{color: colors.error}}>Closed</p>
         ),
     },
-    // {
-    //   field: 'delete',
-    //   headerName: '',
-    //   type: 'text',
-    //   width: '50px',
-    //   center: true,
-    //   renderCell: (row: PhieuYeuCau) => {
-    //     if (
-    //       row?.trangThaiChinh === TrangThaiChinh.TIEP_NHAN &&
-    //       row?.trangThaiPhu === TrangThaiPhu.OPEN &&
-    //       row?.createdById === Number(infoUser.Id)
-    //     )
-    //       return (
-    //         <Box className="flex flex-row justify-around">
-    //           <IconButtonBase
-    //             iconName={Trash}
-    //             color="error"
-    //             rounded
-    //             onClick={e => {
-    //               e.stopPropagation();
-    //               setShowDialog({open: true, data: row});
-    //             }}
-    //           />
-    //         </Box>
-    //       );
-    //   },
-    // },
+    {
+      field: 'thaoTac',
+      headerName: 'Thao tác',
+      type: 'text',
+      width: '100px',
+      center: true,
+      renderCell: row => {
+        return (
+          <Box className="flex flex-row justify-around">
+            <IconButtonBase
+              iconName={Edit}
+              color="primary"
+              rounded
+              // onClick={() => setShowDialog({open: true, id: row?._id})}
+            />
+            <IconButtonBase
+              iconName={Edit}
+              color="primary"
+              rounded
+              // onClick={() => setShowDialog({open: true, id: row?._id})}
+            />
+            <IconButtonBase
+              iconName={Trash}
+              color="error"
+              rounded
+              // onClick={() => setShowConfirm({open: true, data: row})}
+            />
+          </Box>
+        );
+      },
+    },
   ];
 
   return (
@@ -128,11 +131,6 @@ const TablePhieuYeuCau = () => {
             columns={columns}
             rows={data?.data || []}
             loading={isFetching}
-            onRowClick={(row: any) => navigate(`/chi-tiet-ho-so/${row.id}`)}
-            onSortChange={({column, order}) => {
-              setFilters(prev => ({...prev, orderBy: column + ' ' + order}));
-            }}
-            fixedColumn
             pagination={{
               show: true,
               page: (data?.currentPage ?? 1) - 1,
@@ -151,9 +149,9 @@ const TablePhieuYeuCau = () => {
               open={showDialog.open}
               onClose={() => setShowDialog({open: false, data: null})}
               title="Thông báo"
-              content={`Bạn có chắc chắn muốn xóa phiếu yêu cầu số ${showDialog?.data?.id}?`}
+              content={`Bạn có chắc chắn muốn xóa sản phẩm ${showDialog?.data?.name}?`}
               onAgree={() => {
-                mutationDelete.mutate(showDialog?.data?.id ?? 0);
+                mutationDelete.mutate(showDialog?.data?._id ?? 0);
                 setShowDialog({open: false, data: null});
               }}
             />
@@ -166,4 +164,4 @@ const TablePhieuYeuCau = () => {
   );
 };
 
-export default TablePhieuYeuCau;
+export default TableProduct;
