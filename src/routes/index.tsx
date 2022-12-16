@@ -2,7 +2,6 @@ import {Container, Typography} from '@mui/material';
 import {FC, lazy, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {
-  matchPath,
   Navigate,
   Outlet,
   RouteObject,
@@ -11,7 +10,6 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import Loading from 'src/components/loading';
-import {pageNoneAuth} from 'src/constants/pageNoneAuth';
 // import DanhSachNhanSuPage from 'src/modules/quan-ly/nhan-su';
 
 import {selectInfoUser, selectJWT, setJwt} from 'src/redux/slice/authSlice';

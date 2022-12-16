@@ -1,5 +1,7 @@
-import {useContext, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {Box, Card} from '@mui/material';
+import {Edit, Trash} from 'iconsax-react';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useDeleteProduct, useGetAllProduct} from 'src/apis';
 import {
   DataTable,
@@ -7,29 +9,31 @@ import {
   IconButtonBase,
   LoadingSkeleton,
   NoData,
+  SearchBar,
 } from 'src/components/base';
 import {ColumnTableProps} from 'src/components/types';
-import {PathParams, QueryParams} from 'src/models/common';
+import {Product} from 'src/models';
+import {QueryParams} from 'src/models/common';
 import {colors} from 'src/theme';
 import {formatDatetimeDDMMYYYY} from 'src/utils/format';
-import {ProductContext} from '..';
-import {Product} from 'src/models';
-import {Box} from '@mui/material';
-import {Edit, Trash} from 'iconsax-react';
+import DialogProduct from './dialog';
 
 const TableProduct = () => {
-  const {screen = 'tat-ca', subScreen = ''} = useParams<PathParams>();
   const navigate = useNavigate();
-  const search = useContext(ProductContext);
   const [filters, setFilters] = useState<QueryParams>({
     pageNumber: 1,
     pageSize: 10,
     search: '',
   });
+  const [search, setSearch] = useState<string>('');
 
   const {data, isLoading, isFetching} = useGetAllProduct({...filters, search});
 
   const [showDialog, setShowDialog] = useState<{open: boolean; data?: Product | null}>({
+    open: false,
+    data: null,
+  });
+  const [showForm, setShowForm] = useState<{open: boolean; data?: Product | null}>({
     open: false,
     data: null,
   });
@@ -64,7 +68,7 @@ const TableProduct = () => {
       type: 'text',
       width: '100px',
       isSortable: true,
-      renderCell: row => formatDatetimeDDMMYYYY(row?.created),
+      renderCell: row => formatDatetimeDDMMYYYY(row?.createdAt),
     },
     {
       field: 'updatedAt',
@@ -72,7 +76,7 @@ const TableProduct = () => {
       type: 'text',
       width: '100px',
       isSortable: true,
-      renderCell: row => formatDatetimeDDMMYYYY(row?.created),
+      renderCell: row => formatDatetimeDDMMYYYY(row?.updatedAt),
     },
     {
       field: 'status',
@@ -82,8 +86,8 @@ const TableProduct = () => {
       center: true,
       isSortable: true,
       renderCell: row =>
-        row?.trangThaiPhu === 0 ? (
-          <p style={{color: colors.success}}>Open</p>
+        row?.status ? (
+          <p style={{color: colors.success}}>Active</p>
         ) : (
           <p style={{color: colors.error}}>Closed</p>
         ),
@@ -101,19 +105,13 @@ const TableProduct = () => {
               iconName={Edit}
               color="primary"
               rounded
-              // onClick={() => setShowDialog({open: true, id: row?._id})}
-            />
-            <IconButtonBase
-              iconName={Edit}
-              color="primary"
-              rounded
-              // onClick={() => setShowDialog({open: true, id: row?._id})}
+              onClick={() => setShowForm({open: true, data: row})}
             />
             <IconButtonBase
               iconName={Trash}
               color="error"
               rounded
-              // onClick={() => setShowConfirm({open: true, data: row})}
+              onClick={() => setShowDialog({open: true, data: row})}
             />
           </Box>
         );
@@ -123,6 +121,9 @@ const TableProduct = () => {
 
   return (
     <>
+      <Card style={{padding: 15}} className={'mb-2'}>
+        <SearchBar onSubmit={setSearch} />
+      </Card>
       {isLoading ? (
         <LoadingSkeleton.Table numberOfColumns={3} numberOfRows={5} widths={[150, 'auto', 130]} />
       ) : [data?.data].length > 0 ? (
@@ -154,6 +155,13 @@ const TableProduct = () => {
                 mutationDelete.mutate(showDialog?.data?._id ?? 0);
                 setShowDialog({open: false, data: null});
               }}
+            />
+          )}
+          {showForm.open && (
+            <DialogProduct
+              open={showForm.open}
+              onClose={() => setShowForm({data: null, open: false})}
+              id={showForm.data?._id || ''}
             />
           )}
         </>

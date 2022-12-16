@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import {ControllerProps, UseFormReturn} from 'react-hook-form';
 import {DialogConfirm} from 'src/components/base';
-import {DinhKemPhieuYeuCau} from 'src/models';
 import {useAppDispatch} from 'src/redux/hooks';
 import {setShowAlert} from 'src/redux/slice/alertSlice';
 import FileMultiPickerField from '../file-multi-picker-field';
@@ -13,7 +12,7 @@ export interface DinhKemFieldProps {
   label?: string;
   form: UseFormReturn<any>;
   rules?: ControllerProps['rules'] | any;
-  data?: DinhKemPhieuYeuCau[];
+  data?: any[];
   isLoadingDelete?: boolean;
   acceptedFileTypes?: string[];
   onDelete?: (id: number) => void;

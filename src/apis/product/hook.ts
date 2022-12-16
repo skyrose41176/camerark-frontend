@@ -36,8 +36,6 @@ export const useCreateProduct = (onSuccess?: () => void) => {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Tạo sản phẩm thành công'}));
       queryClient.invalidateQueries('listSanPham');
-      queryClient.invalidateQueries('countProduct');
-      queryClient.invalidateQueries('countHopThu');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {
@@ -57,7 +55,7 @@ export const useUpdateProduct = (onSuccess?: () => void) => {
   return useMutation(productApi.update, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Cập nhật sản phẩm thành công'}));
-      queryClient.invalidateQueries('chiTietProduct');
+      queryClient.invalidateQueries('listSanPham');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {

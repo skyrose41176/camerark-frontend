@@ -16,7 +16,7 @@ export const productApi = {
     return axiosClient.post(url, data);
   },
   update: (data: Partial<Product>): Promise<number> => {
-    const url = `/products/cap-nhat${data?._id}`;
+    const url = `/products/cap-nhat?id=${data?._id}`;
     return axiosClient.put(url, data);
   },
   delete: (_id: number | string): Promise<number> => {

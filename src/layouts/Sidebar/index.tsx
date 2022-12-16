@@ -12,16 +12,15 @@ import {
 import {SidebarLeft, SidebarRight} from 'iconsax-react';
 import {FC, useEffect, useMemo, useState} from 'react';
 import {matchPath, useLocation, useNavigate} from 'react-router-dom';
-import {IconButtonBase, SearchBar} from 'src/components/base';
-import {selectInfoUser, setInfoUser} from 'src/redux/slice/authSlice';
+import {IconButtonBase} from 'src/components/base';
+import {selectInfoUser} from 'src/redux/slice/authSlice';
 // import {nguoiDungService} from 'src/services/saturn';
+import {pageNoneAuth} from 'src/constants/pageNoneAuth';
 import sidebars, {Sidebar as ISidebar} from 'src/static/sidebar';
 import {avatar} from 'src/utils';
-import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import NavItem from './NavItem';
+import {useAppSelector} from '../../redux/hooks';
 import './anim.css';
-import {pageNoneAuth} from 'src/constants/pageNoneAuth';
-import {useGetOneNhanSu} from 'src/apis';
+import NavItem from './NavItem';
 interface Props {
   onMobileClose?: () => void;
   openMobile?: boolean;
@@ -31,7 +30,6 @@ const filterByRole = (sidebar: ISidebar[], roles: string[]) => {
   return sidebar.filter(item => {
     return (
       roles.some(role => {
-        // console.log(role + '/*', {href: item.href});
         return !!matchPath(
           {
             path: item.href + '/*',
@@ -125,7 +123,6 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
           <Stack display="flex" alignItems="center" style={{padding: 10}}>
             {true ? (
               <Avatar
-                onClick={() => navigate('/thong-tin-ca-nhan')}
                 sx={{backgroundColor: avatar.getColor(user.name)}}
                 className={`border-2 border-solid border-[#ececec] font-bold text-base cursor-pointer`}
                 src={user.name}
@@ -181,9 +178,6 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
           </Stack>
 
           <Divider className="bg-primary" />
-          <div className="p-2">
-            <SearchBar onSubmit={setSearch} width="auto" placeholder="Nhập tên menu" />
-          </div>
           {content}
           <Divider className="bg-primary" />
 

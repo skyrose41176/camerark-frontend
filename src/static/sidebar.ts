@@ -24,11 +24,6 @@ export const sidebars = (): Sidebar[] => {
       title: 'Danh sách giao dịch',
     },
     {
-      href: '/tim-kiem',
-      icon: SearchNormal,
-      title: 'Tìm kiếm',
-    },
-    {
       href: '/quan-ly',
       icon: ManageAccountsIcon,
       title: 'Quản lý',
