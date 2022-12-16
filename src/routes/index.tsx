@@ -33,40 +33,42 @@ interface AuthProps {
 const Auth: FC<AuthProps> = ({children}) => {
   const {roles, Email} = useSelector(selectInfoUser);
   const location = useLocation();
-
-  return roles.some(
-    role =>
-      !!matchPath(
-        {
-          path: role + '/*',
-          caseSensitive: true,
-          // end: true,
-        },
-        location.pathname
-      )
-  ) ||
-    pageNoneAuth({
-      roles,
-      currentPath: location.pathname,
-    }) ? (
-    <>{children}</>
-  ) : Email ? (
-    <Navigate
-      to="/403"
-      state={{
-        from: location,
-      }}
-      replace
-    />
-  ) : (
-    <Navigate
-      to="/401"
-      state={{
-        from: location,
-      }}
-      replace
-    />
-  );
+  const {token} = useParams();
+  const jwt = useSelector(selectJWT);
+  return jwt ? <>{children}</> : <Navigate to="/login" />;
+  // return roles.some(
+  //   role =>
+  //     !!matchPath(
+  //       {
+  //         path: role + '/*',
+  //         caseSensitive: true,
+  //         // end: true,
+  //       },
+  //       location.pathname
+  //     )
+  // ) ||
+  //   pageNoneAuth({
+  //     roles,
+  //     currentPath: location.pathname,
+  //   }) ? (
+  //   <>{children}</>
+  // ) : Email ? (
+  //   <Navigate
+  //     to="/403"
+  //     state={{
+  //       from: location,
+  //     }}
+  //     replace
+  //   />
+  // ) : (
+  //   <Navigate
+  //     to="/401"
+  //     state={{
+  //       from: location,
+  //     }}
+  //     replace
+  //   />
+  // );
 };
 
 const RedirectChiTietPhieuYeuCau: FC<any> = ({children}) => {
@@ -89,6 +91,7 @@ const TokenPage = () => {
       dispatch(setJwt(token));
     }
   }, [dispatch, token]);
+  console.log(jwt);
 
   if (!jwt) {
     return <Loading delay={300} />;
