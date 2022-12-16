@@ -4,34 +4,34 @@ import {ButtonBase} from 'src/components/base';
 import {PageWrapper} from 'src/components/wrapper';
 import Header from '../../layouts/Header';
 import './index.css';
-import TableProduct from './table-phieu-yeu-cau';
-import DialogProduct from './table-phieu-yeu-cau/dialog';
+import TableTransaction from './table-giao-dich';
+import DialogTransaction from './table-giao-dich/dialog';
 
-export const ProductContext = createContext<string>('');
+export const TransactionContext = createContext<string>('');
 
-const RoutePageDanhSachProduct = () => {
+const DanhSachGiaoDichPage = () => {
   const [dialogCreatePYC, setDialogCreatePYC] = useState({open: false});
   return (
     <div>
       <Header
-        title="Danh sách sản phẩm"
+        title="Danh sách giao dịch"
         actions={
           <Stack className="txtUppercase">
             <ButtonBase
               variant="outlined"
               color="success"
-              label="Tạo sản phẩm"
+              label="Tạo giao dịch"
               onClick={() => setDialogCreatePYC({open: true})}
             />
           </Stack>
         }
       />
       <PageWrapper>
-        <TableProduct />
+        <TableTransaction />
       </PageWrapper>
 
       {dialogCreatePYC?.open && (
-        <DialogProduct
+        <DialogTransaction
           open={dialogCreatePYC.open}
           onClose={() => setDialogCreatePYC({open: false})}
         />
@@ -40,4 +40,4 @@ const RoutePageDanhSachProduct = () => {
   );
 };
 
-export default RoutePageDanhSachProduct;
+export default DanhSachGiaoDichPage;

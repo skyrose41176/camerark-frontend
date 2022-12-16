@@ -10,19 +10,14 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import Loading from 'src/components/loading';
-// import DanhSachNhanSuPage from 'src/modules/quan-ly/nhan-su';
+import DanhSachGiaoDichPage from 'src/modules/danh-sach-giao-dich';
+import DanhSachSanPhamPage from 'src/modules/danh-sach-san-pham';
 
 import {selectInfoUser, selectJWT, setJwt} from 'src/redux/slice/authSlice';
 import {NotFound} from '../components';
-// import ThongTinChiTietPage from '../modules/danh-sach-phieu-yeu-cau/chi-tiet-ho-so';
 import {useAppDispatch} from '../redux/hooks';
 const MainLayout = lazy(() => import('../layouts'));
-
-const DanhSachPhieuYeuCau = lazy(() => import('src/modules/danh-sach-phieu-yeu-cau'));
-// const LoaiNghiepVu = lazy(() => import('src/modules/quan-ly/loai-nghiep-vu'));
-// const LoaiYeuCau = lazy(() => import('src/modules/quan-ly/loai-yeu-cau'));
-// const BoPhan = lazy(() => import('src/modules/quan-ly/bo-phan'));
-// const TimKiem = lazy(() => import('src/modules/tim-kiem-phieu-yeu-cau'));
+const DanhSachProduct = lazy(() => import('src/modules/danh-sach-san-pham'));
 const LoginPage = lazy(() => import('src/modules/auth/login'));
 
 interface AuthProps {
@@ -34,81 +29,12 @@ const Auth: FC<AuthProps> = ({children}) => {
   const {token} = useParams();
   const jwt = useSelector(selectJWT);
   return jwt ? <>{children}</> : <Navigate to="/login" />;
-  // return roles.some(
-  //   role =>
-  //     !!matchPath(
-  //       {
-  //         path: role + '/*',
-  //         caseSensitive: true,
-  //         // end: true,
-  //       },
-  //       location.pathname
-  //     )
-  // ) ||
-  //   pageNoneAuth({
-  //     roles,
-  //     currentPath: location.pathname,
-  //   }) ? (
-  //   <>{children}</>
-  // ) : Email ? (
-  //   <Navigate
-  //     to="/403"
-  //     state={{
-  //       from: location,
-  //     }}
-  //     replace
-  //   />
-  // ) : (
-  //   <Navigate
-  //     to="/401"
-  //     state={{
-  //       from: location,
-  //     }}
-  //     replace
-  //   />
-  // );
-};
-
-const RedirectChiTietPhieuYeuCau: FC<any> = ({children}) => {
-  const [searchParams] = useSearchParams();
-  const url = searchParams.get('phieuYeuCauId');
-
-  if (url) {
-    return <Navigate to={`/chi-tiet-ho-so/${url}`} />;
-  }
-  return <>{children}</>;
-};
-
-const TokenPage = () => {
-  const {token} = useParams();
-  const jwt = useSelector(selectJWT);
-
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (token) {
-      dispatch(setJwt(token));
-    }
-  }, [dispatch, token]);
-  console.log(jwt);
-
-  if (!jwt) {
-    return <Loading delay={300} />;
-  }
-  return (
-    <RedirectChiTietPhieuYeuCau>
-      <Navigate to="/" />;
-    </RedirectChiTietPhieuYeuCau>
-  );
 };
 
 export const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Navigate to="/danh-sach-phieu-yeu-cau" />,
-  },
-  {
-    path: '/token/:token',
-    element: <TokenPage />,
+    element: <Navigate to="/danh-sach-san-pham" />,
   },
   {
     path: '/login',
@@ -121,60 +47,22 @@ export const routes: RouteObject[] = [
       </Auth>
     ),
     children: [
-      // {
-      //   path: 'thong-tin-ca-nhan',
-      //   element: <ThongTinCaNhanPage />,
-      // },
       {
-        path: 'danh-sach-phieu-yeu-cau',
-        element: <Outlet />,
-        children: [
-          {index: true, element: <Navigate to="tat-ca" replace />},
-          {
-            path: ':screen',
-            element: <DanhSachPhieuYeuCau />,
-            children: [
-              {
-                path: ':subScreen',
-                element: <DanhSachPhieuYeuCau />,
-              },
-            ],
-          },
-          {
-            path: ':tab/:id',
-            element: <h1>chi tiết phiếu yêu cầu</h1>,
-          },
-        ],
+        path: '/danh-sach-san-pham',
+        element: <DanhSachSanPhamPage />,
       },
-      // {
-      //   path: 'tim-kiem',
-      //   element: <TimKiem />,
-      // },
-      // {
-      //   path: 'quan-ly',
-      //   children: [
-      //     {
-      //       path: 'loai-nghiep-vu',
-      //       element: <LoaiNghiepVu />,
-      //     },
-      //     {
-      //       path: 'loai-yeu-cau',
-      //       element: <LoaiYeuCau />,
-      //     },
-      //     {
-      //       path: 'bo-phan',
-      //       element: <BoPhan />,
-      //     },
-      //     {
-      //       path: 'danh-sach-nhan-su',
-      //       element: <DanhSachNhanSuPage />,
-      //     },
-      //   ],
-      // },
-      // {
-      //   path: 'chi-tiet-ho-so/:idHoSo',
-      //   element: <ThongTinChiTietPage />,
-      // },
+      {
+        path: '/danh-sach-kho-hang',
+        element: <DanhSachSanPhamPage />,
+      },
+      {
+        path: '/danh-sach-giao-dich',
+        element: <DanhSachGiaoDichPage />,
+      },
+      {
+        path: '/danh-sach-nguoi-dung',
+        element: <DanhSachSanPhamPage />,
+      },
     ],
   },
 

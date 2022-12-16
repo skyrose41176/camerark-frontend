@@ -6,10 +6,10 @@ import {setShowAlert} from 'src/redux/slice/alertSlice';
 import {userApi} from './user';
 
 export const useGetAllUser = (filters: QueryParams) => {
-  const res = useQuery(['listSanPham', filters], () => userApi.getAll(filters), {
+  const res = useQuery(['listNguoiDung', filters], () => userApi.getAll(filters), {
     onError: () => console.log('lỗi get all người dùng'),
     select: data => {
-      return data.data;
+      return data;
     },
   });
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
@@ -23,7 +23,7 @@ export const useGetOneUser = (id: string, onSuccess?: (data: User) => void) => {
     onError: () => console.log('lỗi get one người dùng'),
     enabled: !!id,
     select(data) {
-      return data.data;
+      return data;
     },
   });
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
@@ -35,9 +35,7 @@ export const useCreateUser = (onSuccess?: () => void) => {
   return useMutation(userApi.create, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Tạo người dùng thành công'}));
-      queryClient.invalidateQueries('listSanPham');
-      queryClient.invalidateQueries('countUser');
-      queryClient.invalidateQueries('countHopThu');
+      queryClient.invalidateQueries('listNguoiDung');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {
@@ -57,7 +55,7 @@ export const useUpdateUser = (onSuccess?: () => void) => {
   return useMutation(userApi.update, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Cập nhật người dùng thành công'}));
-      queryClient.invalidateQueries('chiTietUser');
+      queryClient.invalidateQueries('listNguoiDung');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {
@@ -76,7 +74,7 @@ export const useDeleteUser = (onSuccess?: () => void) => {
   return useMutation(userApi.delete, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Xóa người dùng thành công'}));
-      queryClient.invalidateQueries('listSanPham');
+      queryClient.invalidateQueries('listNguoiDung');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {

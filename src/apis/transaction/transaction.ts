@@ -1,25 +1,25 @@
-import {Product} from 'src/models';
-import {QueryParams, ResponseData, ResultData} from 'src/models/common';
+import {Transaction} from 'src/models';
+import {QueryParams, ResultData} from 'src/models/common';
 import axiosClient from '../axiosClient';
 
 export const transactionApi = {
-  getAll: (params: QueryParams): Promise<ResponseData<ResultData<Product>>> => {
+  getAll: (params: QueryParams): Promise<ResultData<Transaction>> => {
     const url = '/transactions/du-lieu';
     return axiosClient.get(url, {params});
   },
-  getOne: (_id: number | string): Promise<ResponseData<Product>> => {
+  getOne: (_id: number | string): Promise<Transaction> => {
     const url = `/transactions/chi-tiet?id=${_id}`;
     return axiosClient.get(url);
   },
-  create: (data: Partial<Product>): Promise<ResponseData<number>> => {
+  create: (data: Partial<Transaction>): Promise<number> => {
     const url = '/transactions/tao';
     return axiosClient.post(url, data);
   },
-  update: (data: Partial<Product>): Promise<ResponseData<number>> => {
-    const url = `/transactions/cap-nhat${data?._id}`;
+  update: (data: Partial<Transaction>): Promise<number> => {
+    const url = `/transactions/cap-nhat?id=${data?._id}`;
     return axiosClient.put(url, data);
   },
-  delete: (_id: number | string): Promise<ResponseData<number>> => {
+  delete: (_id: number | string): Promise<number> => {
     const url = `/transactions/xoa?id=${_id}`;
     return axiosClient.delete(url);
   },

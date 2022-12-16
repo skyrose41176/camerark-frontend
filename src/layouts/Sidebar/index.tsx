@@ -14,7 +14,6 @@ import {FC, useEffect, useMemo, useState} from 'react';
 import {matchPath, useLocation, useNavigate} from 'react-router-dom';
 import {IconButtonBase} from 'src/components/base';
 import {selectInfoUser} from 'src/redux/slice/authSlice';
-// import {nguoiDungService} from 'src/services/saturn';
 import {pageNoneAuth} from 'src/constants/pageNoneAuth';
 import sidebars, {Sidebar as ISidebar} from 'src/static/sidebar';
 import {avatar} from 'src/utils';
@@ -67,22 +66,15 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
     () => (
       <Box className="sidebar flex flex-1" sx={{p: '10px', pt: 0, overflowY: 'auto'}}>
         <List className="w-full">
-          {filterByRole(sidebars(), infoUser.roles)
-            .filter(item => {
-              const lengthChild =
-                item.children?.filter(obj => obj.title.toLowerCase().includes(search.toLowerCase()))
-                  ?.length ?? 0;
-              return item.title.toLowerCase().includes(search.toLowerCase()) || lengthChild > 0;
-            })
-            .map(item => (
-              <NavItem
-                key={item.title}
-                item={item}
-                collapse={collapse}
-                hover={hover}
-                search={search}
-              />
-            ))}
+          {sidebars().map(item => (
+            <NavItem
+              key={item.title}
+              item={item}
+              collapse={collapse}
+              hover={hover}
+              search={search}
+            />
+          ))}
         </List>
       </Box>
     ),
@@ -142,7 +134,7 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
               <>
                 {user.name ? (
                   <Typography variant="body2" color="#fff" marginTop={1} textAlign="center">
-                    {user.name}
+                    {user.name.toUpperCase()}
                   </Typography>
                 ) : (
                   <Skeleton

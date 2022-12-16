@@ -9,7 +9,7 @@ export const useGetAllTransaction = (filters: QueryParams) => {
   const res = useQuery(['listGiaoDich', filters], () => transactionApi.getAll(filters), {
     onError: () => console.log('lỗi get all giao dịch'),
     select: data => {
-      return data.data;
+      return data;
     },
   });
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
@@ -23,7 +23,7 @@ export const useGetOneTransaction = (id: string, onSuccess?: (data: Transaction)
     onError: () => console.log('lỗi get one giao dịch'),
     enabled: !!id,
     select(data) {
-      return data.data;
+      return data;
     },
   });
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
@@ -36,8 +36,6 @@ export const useCreateTransaction = (onSuccess?: () => void) => {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Tạo giao dịch thành công'}));
       queryClient.invalidateQueries('listGiaoDich');
-      queryClient.invalidateQueries('countTransaction');
-      queryClient.invalidateQueries('countHopThu');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {
@@ -57,7 +55,7 @@ export const useUpdateTransaction = (onSuccess?: () => void) => {
   return useMutation(transactionApi.update, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Cập nhật giao dịch thành công'}));
-      queryClient.invalidateQueries('chiTietTransaction');
+      queryClient.invalidateQueries('listGiaoDich');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {

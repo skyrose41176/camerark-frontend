@@ -6,10 +6,10 @@ import {setShowAlert} from 'src/redux/slice/alertSlice';
 import {modelProductApi} from './modelproduct';
 
 export const useGetAllProduct = (filters: QueryParams) => {
-  const res = useQuery(['listSanPham', filters], () => modelProductApi.getAll(filters), {
+  const res = useQuery(['listSanPhamModel', filters], () => modelProductApi.getAll(filters), {
     onError: () => console.log('lỗi get all kho sản phẩm'),
     select: data => {
-      return data.data;
+      return data;
     },
   });
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
@@ -23,7 +23,7 @@ export const useGetOneProduct = (id: string, onSuccess?: (data: Product) => void
     onError: () => console.log('lỗi get one kho sản phẩm'),
     enabled: !!id,
     select(data) {
-      return data.data;
+      return data;
     },
   });
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
@@ -35,9 +35,7 @@ export const useCreateProduct = (onSuccess?: () => void) => {
   return useMutation(modelProductApi.create, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Tạo kho sản phẩm thành công'}));
-      queryClient.invalidateQueries('listSanPham');
-      queryClient.invalidateQueries('countProduct');
-      queryClient.invalidateQueries('countHopThu');
+      queryClient.invalidateQueries('listSanPhamModel');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {
@@ -57,7 +55,7 @@ export const useUpdateProduct = (onSuccess?: () => void) => {
   return useMutation(modelProductApi.update, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Cập nhật kho sản phẩm thành công'}));
-      queryClient.invalidateQueries('chiTietProduct');
+      queryClient.invalidateQueries('listSanPhamModel');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {
@@ -76,7 +74,7 @@ export const useDeleteProduct = (onSuccess?: () => void) => {
   return useMutation(modelProductApi.delete, {
     onSuccess: () => {
       dispatch(setShowAlert({type: 'success', message: 'Xóa kho sản phẩm thành công'}));
-      queryClient.invalidateQueries('listSanPham');
+      queryClient.invalidateQueries('listSanPhamModel');
       onSuccess && onSuccess();
     },
     onError: (error: any) => {

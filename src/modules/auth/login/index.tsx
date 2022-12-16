@@ -9,7 +9,7 @@ import {InputField} from 'src/components/hook-form/fields';
 import {useAppDispatch} from 'src/redux/hooks';
 import {setJwt} from 'src/redux/slice/authSlice';
 import {getAPIBaseUrl} from 'src/utils/urls';
-import logo from 'src/assets/images/logoText1.jpg';
+import logo from 'src/assets/images/logo.jpg';
 interface FormLogin {
   phone: string;
   password: string;

@@ -1,0 +1,25 @@
+@keyframes open {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes close {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+.scale0 {
+  transform: scale(0);
+}
+.openDetail {
+  animation: open ease 0.5s forwards;
+}
+.closeDetail {
+  animation: close ease 0.5s forwards;
+}

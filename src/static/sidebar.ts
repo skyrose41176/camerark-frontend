@@ -1,5 +1,4 @@
-import {SearchNormal, TableDocument} from 'iconsax-react';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import {Camera, Home, Profile2User, Translate} from 'iconsax-react';
 export interface Sidebar {
   href: string;
   icon?: any;
@@ -9,42 +8,24 @@ export interface Sidebar {
 export const sidebars = (): Sidebar[] => {
   return [
     {
-      href: '/danh-sach-phieu-yeu-cau',
-      icon: TableDocument,
-      title: 'Danh sách sản phẩm',
+      href: '/danh-sach-san-pham',
+      icon: Camera,
+      title: 'Sản phẩm',
     },
     {
-      href: '/danh-sach-phieu-yeu-cau',
-      icon: TableDocument,
-      title: 'Danh sách sản phẩm',
+      href: '/danh-sach-kho-hang',
+      icon: Home,
+      title: 'Kho',
     },
     {
-      href: '/danh-sach-phieu-yeu-cau',
-      icon: TableDocument,
-      title: 'Danh sách giao dịch',
+      href: '/danh-sach-giao-dich',
+      icon: Translate,
+      title: 'Giao dịch',
     },
     {
-      href: '/quan-ly',
-      icon: ManageAccountsIcon,
-      title: 'Quản lý',
-      children: [
-        {
-          href: '/quan-ly/loai-nghiep-vu',
-          title: 'Loại nghiệp vụ',
-        },
-        {
-          href: '/quan-ly/loai-yeu-cau',
-          title: 'Loại yêu cầu',
-        },
-        {
-          href: '/quan-ly/bo-phan',
-          title: 'Bộ phận',
-        },
-        {
-          href: '/quan-ly/danh-sach-nhan-su',
-          title: 'Danh sách nhân sự',
-        },
-      ],
+      href: '/danh-sach-nguoi-dung',
+      icon: Profile2User,
+      title: 'Người dùng',
     },
   ];
 };
