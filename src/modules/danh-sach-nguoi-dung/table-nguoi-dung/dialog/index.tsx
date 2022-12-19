@@ -1,17 +1,17 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {useCreateProduct, useGetOneProduct, useUpdateProduct} from 'src/apis';
+import {useCreateUser, useGetOneUser, useUpdateUser} from 'src/apis';
 import {DialogBase} from 'src/components/base';
-import {CheckboxField, InputField} from 'src/components/hook-form/fields';
+import {InputField} from 'src/components/hook-form/fields';
 import FieldLayout from 'src/layouts/FieldLayout';
-import {Product} from 'src/models';
+import {User} from 'src/models';
 
 interface Props {
   open: boolean;
   id?: string | undefined;
   onClose: () => void;
 }
-const DialogProduct = ({open, id, onClose}: Props) => {
-  const form = useForm<Product>({defaultValues: {}});
+const DialogUser = ({open, id, onClose}: Props) => {
+  const form = useForm<User>({defaultValues: {}});
   const {
     handleSubmit,
     reset,
@@ -19,20 +19,18 @@ const DialogProduct = ({open, id, onClose}: Props) => {
     formState: {isSubmitting},
   } = form;
 
-  if (id) {
-    useGetOneProduct(id, (data: Product) => {
-      setValue('name', data?.name);
-      setValue('brand', data?.brand);
-      setValue('status', data?.status);
-    });
-  }
+  useGetOneUser(id, (data: User) => {
+    setValue('name', data?.name);
+    setValue('address', data?.address);
+    setValue('phone', data?.phone);
+  });
 
-  const mutationCreate = useCreateProduct(() => {
+  const mutationCreate = useCreateUser(() => {
     onClose();
     reset();
   });
 
-  const mutationUpdate = useUpdateProduct(() => {
+  const mutationUpdate = useUpdateUser(() => {
     onClose();
     reset();
   });
@@ -47,7 +45,7 @@ const DialogProduct = ({open, id, onClose}: Props) => {
   return (
     <DialogBase
       open={open}
-      title={id ? 'Sửa sản phẩm' : 'Thêm mới sản phẩm'}
+      title={id ? 'Sửa người dùng' : 'Thêm mới người dùng'}
       onClose={onClose}
       onSubmit={handleSubmit(onSubmit)}
       loading={isSubmitting}
@@ -57,28 +55,39 @@ const DialogProduct = ({open, id, onClose}: Props) => {
         <InputField
           form={form}
           name="name"
-          label="Tên sản phẩm"
+          label="Tên người dùng"
           rules={{
             required: {
               value: true,
-              message: ' Vui lòng nhập tên sản phẩm',
+              message: ' Vui lòng nhập tên người dùng',
             },
           }}
         />
         <InputField
           form={form}
-          name="brand"
-          label="Tên nhãn hiệu"
+          name="phone"
+          label="Số điện thoại"
           rules={{
             required: {
               value: true,
-              message: ' Vui lòng nhập tên nhãn hiệu',
+              message: ' Vui lòng nhập số điện thoại',
             },
           }}
         />
-        <CheckboxField form={form} name="status" label="Active" />
+        <InputField
+          form={form}
+          name="password"
+          label="Mật khẩu"
+          rules={{
+            required: {
+              value: true,
+              message: ' Vui lòng nhập mật khẩu',
+            },
+          }}
+        />
+        <InputField form={form} name="address" label="Địa chỉ" />
       </FieldLayout>
     </DialogBase>
   );
 };
-export default DialogProduct;
+export default DialogUser;

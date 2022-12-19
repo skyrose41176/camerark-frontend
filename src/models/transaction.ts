@@ -1,4 +1,5 @@
 import {TimeStamp} from './common';
+import {ModelProduct, Product} from './product';
 
 export interface Transaction extends TimeStamp {
   _id: string;
@@ -9,5 +10,8 @@ export interface Transaction extends TimeStamp {
   priceOut: string;
   profit: string;
   createdAt: string;
+  content: string;
+  product: Product;
+  modelProduct: ModelProduct;
   updatedAt: string;
 }

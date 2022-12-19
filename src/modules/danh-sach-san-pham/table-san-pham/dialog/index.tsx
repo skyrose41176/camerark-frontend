@@ -19,13 +19,12 @@ const DialogProduct = ({open, id, onClose}: Props) => {
     formState: {isSubmitting},
   } = form;
 
-  if (id) {
-    useGetOneProduct(id, (data: Product) => {
-      setValue('name', data?.name);
-      setValue('brand', data?.brand);
-      setValue('status', data?.status);
-    });
-  }
+  useGetOneProduct(id, (data: Product) => {
+    setValue('name', data?.name);
+    setValue('brand', data?.brand);
+    setValue('status', data?.status);
+    setValue('content', data?.content);
+  });
 
   const mutationCreate = useCreateProduct(() => {
     onClose();
@@ -77,6 +76,9 @@ const DialogProduct = ({open, id, onClose}: Props) => {
           }}
         />
         <CheckboxField form={form} name="status" label="Active" />
+      </FieldLayout>
+      <FieldLayout md={12} lg={12} xl={12} className={'mt-2'}>
+        <InputField form={form} name="content" label="Mô tả" multiline minRows={3} />
       </FieldLayout>
     </DialogBase>
   );

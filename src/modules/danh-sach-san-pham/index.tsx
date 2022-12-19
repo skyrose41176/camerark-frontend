@@ -7,8 +7,6 @@ import './index.css';
 import TableProduct from './table-san-pham';
 import DialogProduct from './table-san-pham/dialog';
 
-export const ProductContext = createContext<string>('');
-
 const DanhSachSanPhamPage = () => {
   const [dialogCreatePYC, setDialogCreatePYC] = useState({open: false});
   return (

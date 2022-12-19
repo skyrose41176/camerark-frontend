@@ -4,23 +4,21 @@ import {ButtonBase} from 'src/components/base';
 import {PageWrapper} from 'src/components/wrapper';
 import Header from '../../layouts/Header';
 import './index.css';
-import TableProduct from './table-san-pham';
-import DialogProduct from './table-san-pham/dialog';
+import TableProduct from './table-kho-hang';
+import DialogProduct from './table-kho-hang/dialog';
 
-export const ProductContext = createContext<string>('');
-
-const DanhSachSanPhamPage = () => {
+const DanhSachKhoHangPage = () => {
   const [dialogCreatePYC, setDialogCreatePYC] = useState({open: false});
   return (
     <div>
       <Header
-        title="Danh sách sản phẩm"
+        title="Danh sách kho sản phẩm"
         actions={
           <Stack className="txtUppercase">
             <ButtonBase
               variant="outlined"
               color="success"
-              label="Tạo sản phẩm"
+              label="Thêm sản phẩm vào kho"
               onClick={() => setDialogCreatePYC({open: true})}
             />
           </Stack>
@@ -40,4 +38,4 @@ const DanhSachSanPhamPage = () => {
   );
 };
 
-export default DanhSachSanPhamPage;
+export default DanhSachKhoHangPage;

@@ -1,11 +1,11 @@
 import {useMutation, useQuery, useQueryClient} from 'react-query';
-import {Product} from 'src/models';
+import {ModelProduct, Product} from 'src/models';
 import {QueryParams} from 'src/models/common';
 import {useAppDispatch} from 'src/redux/hooks';
 import {setShowAlert} from 'src/redux/slice/alertSlice';
 import {modelProductApi} from './modelproduct';
 
-export const useGetAllProduct = (filters: QueryParams) => {
+export const useGetAllModelProduct = (filters: QueryParams) => {
   const res = useQuery(['listSanPhamModel', filters], () => modelProductApi.getAll(filters), {
     onError: () => console.log('lỗi get all kho sản phẩm'),
     select: data => {
@@ -15,7 +15,10 @@ export const useGetAllProduct = (filters: QueryParams) => {
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
 };
 
-export const useGetOneProduct = (id: string, onSuccess?: (data: Product) => void) => {
+export const useGetOneModelProduct = (
+  id: string | undefined,
+  onSuccess?: (data: ModelProduct) => void
+) => {
   const res = useQuery(['chiTietProduct', id], () => modelProductApi.getOne(id), {
     onSuccess: (data: any) => {
       onSuccess && onSuccess(data.data);
@@ -29,7 +32,7 @@ export const useGetOneProduct = (id: string, onSuccess?: (data: Product) => void
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
 };
 
-export const useCreateProduct = (onSuccess?: () => void) => {
+export const useCreateModelProduct = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   return useMutation(modelProductApi.create, {
@@ -49,7 +52,7 @@ export const useCreateProduct = (onSuccess?: () => void) => {
   });
 };
 
-export const useUpdateProduct = (onSuccess?: () => void) => {
+export const useUpdateModelProduct = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   return useMutation(modelProductApi.update, {
@@ -68,7 +71,7 @@ export const useUpdateProduct = (onSuccess?: () => void) => {
     },
   });
 };
-export const useDeleteProduct = (onSuccess?: () => void) => {
+export const useDeleteModelProduct = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   return useMutation(modelProductApi.delete, {

@@ -15,7 +15,7 @@ export const useGetAllUser = (filters: QueryParams) => {
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
 };
 
-export const useGetOneUser = (id: string, onSuccess?: (data: User) => void) => {
+export const useGetOneUser = (id: string | undefined, onSuccess?: (data: User) => void) => {
   const res = useQuery(['chiTietUser', id], () => userApi.getOne(id), {
     onSuccess: (data: any) => {
       onSuccess && onSuccess(data.data);

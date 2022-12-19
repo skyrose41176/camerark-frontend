@@ -11,6 +11,8 @@ import {
 } from 'react-router-dom';
 import Loading from 'src/components/loading';
 import DanhSachGiaoDichPage from 'src/modules/danh-sach-giao-dich';
+import DanhSachKhoHangPage from 'src/modules/danh-sach-kho-hang';
+import DanhSachUserPage from 'src/modules/danh-sach-nguoi-dung';
 import DanhSachSanPhamPage from 'src/modules/danh-sach-san-pham';
 
 import {selectInfoUser, selectJWT, setJwt} from 'src/redux/slice/authSlice';
@@ -53,7 +55,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: '/danh-sach-kho-hang',
-        element: <DanhSachSanPhamPage />,
+        element: <DanhSachKhoHangPage />,
       },
       {
         path: '/danh-sach-giao-dich',
@@ -61,7 +63,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: '/danh-sach-nguoi-dung',
-        element: <DanhSachSanPhamPage />,
+        element: <DanhSachUserPage />,
       },
     ],
   },

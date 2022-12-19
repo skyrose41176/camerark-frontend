@@ -7,7 +7,7 @@ export const transactionApi = {
     const url = '/transactions/du-lieu';
     return axiosClient.get(url, {params});
   },
-  getOne: (_id: number | string): Promise<Transaction> => {
+  getOne: (_id: number | string | undefined): Promise<Transaction> => {
     const url = `/transactions/chi-tiet?id=${_id}`;
     return axiosClient.get(url);
   },

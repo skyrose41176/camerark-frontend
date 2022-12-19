@@ -1,7 +1,14 @@
+import {useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {useCreateTransaction, useGetOneTransaction, useUpdateTransaction} from 'src/apis';
+import {
+  useCreateTransaction,
+  useGetAllProduct,
+  useGetOneTransaction,
+  useUpdateTransaction,
+} from 'src/apis';
+import {useGetAllModelProduct} from 'src/apis/modelproduct';
 import {DialogBase} from 'src/components/base';
-import {InputField} from 'src/components/hook-form/fields';
+import {AutocompleteAsyncField, InputField} from 'src/components/hook-form/fields';
 import FieldLayout from 'src/layouts/FieldLayout';
 import {Transaction} from 'src/models';
 
@@ -11,7 +18,7 @@ interface Props {
   onClose: () => void;
 }
 const DialogTransaction = ({open, id, onClose}: Props) => {
-  const form = useForm<Transaction>({defaultValues: {}});
+  const form = useForm<any>({defaultValues: {}});
   const {
     handleSubmit,
     reset,
@@ -19,17 +26,29 @@ const DialogTransaction = ({open, id, onClose}: Props) => {
     formState: {isSubmitting},
   } = form;
 
-  if (id) {
-    useGetOneTransaction(id, (data: Transaction) => {
-      setValue('modelProductId', data?.modelProductId);
-      setValue('nameCustomer', data?.nameCustomer);
-      setValue('phoneCustomer', data?.phoneCustomer);
-      setValue('priceIn', data?.priceIn);
-      setValue('priceOut', data?.priceOut);
-      setValue('profit', data?.profit);
-    });
-  }
+  useGetOneTransaction(id, (data: Transaction) => {
+    setValue('modelProductId', data?.modelProductId);
+    setValue('nameCustomer', data?.nameCustomer);
+    setValue('phoneCustomer', data?.phoneCustomer);
+    setValue('priceIn', data?.priceIn);
+    setValue('priceOut', data?.priceOut);
+    setValue('profit', data?.profit);
+    setValue('content', data?.content);
+    setValue('product', data?.product);
+    setValue('modelProduct', data?.modelProduct);
+  });
 
+  const [search, setSearch] = useState<string>('');
+  const {data, isLoading, isFetching} = useGetAllProduct({search});
+
+  const [searchModel, setSearchModel] = useState<string>('');
+
+  const [filters, setFilters] = useState<string>('');
+  const {
+    data: dataModel,
+    isLoading: isLoadingModel,
+    isFetching: isFetchingModel,
+  } = useGetAllModelProduct({productId: filters, search: searchModel});
   const mutationCreate = useCreateTransaction(() => {
     onClose();
     reset();
@@ -50,21 +69,66 @@ const DialogTransaction = ({open, id, onClose}: Props) => {
   return (
     <DialogBase
       open={open}
-      title={id ? 'Sửa sản phẩm' : 'Thêm mới sản phẩm'}
+      title={id ? 'Sửa giao dịch' : 'Thêm mới giao dịch'}
       onClose={onClose}
       onSubmit={handleSubmit(onSubmit)}
       loading={isSubmitting}
       maxWidth="lg"
     >
       <FieldLayout md={4} lg={4} xl={4}>
-        <InputField
+        <AutocompleteAsyncField
           form={form}
-          name="modelProductId"
-          label="Tên sản phẩm"
+          name="product"
+          label="Sản phẩm"
+          items={
+            data?.data.map(item => ({
+              ...item,
+              label: item.name,
+              value: item._id,
+            })) ?? []
+          }
+          loading={isLoading}
           rules={{
             required: {
               value: true,
-              message: ' Vui lòng nhập tên sản phẩm',
+              message: ' Vui lòng chọn sản phẩm',
+            },
+          }}
+          onSubmit={setSearch}
+          onChange={value => {
+            setFilters(value._id);
+          }}
+          valueTypeSelectObject
+        />
+        <AutocompleteAsyncField
+          form={form}
+          name="modelproduct"
+          label="Kho sản phẩm"
+          items={
+            dataModel?.data.map(item => ({
+              ...item,
+              label: item.model,
+              value: item._id,
+            })) ?? []
+          }
+          loading={isLoadingModel}
+          rules={{
+            required: {
+              value: true,
+              message: ' Vui lòng chọn sản phẩm',
+            },
+          }}
+          onSubmit={setSearchModel}
+          valueTypeSelectObject
+        />
+        <InputField
+          form={form}
+          name="modelProductId"
+          label="Tên giao dịch"
+          rules={{
+            required: {
+              value: true,
+              message: ' Vui lòng nhập tên giao dịch',
             },
           }}
         />
@@ -113,6 +177,9 @@ const DialogTransaction = ({open, id, onClose}: Props) => {
           }}
         />
         <InputField form={form} name="profit" label="Lợi nhuận" />
+      </FieldLayout>
+      <FieldLayout md={12} lg={12} xl={12} className={'mt-2'}>
+        <InputField form={form} name="content" label="Mô tả" multiline minRows={3} />
       </FieldLayout>
     </DialogBase>
   );

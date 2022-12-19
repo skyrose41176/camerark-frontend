@@ -7,7 +7,7 @@ export const userApi = {
     const url = '/users/du-lieu';
     return axiosClient.get(url, {params});
   },
-  getOne: (_id: number | string): Promise<User> => {
+  getOne: (_id: number | string | undefined): Promise<User> => {
     const url = `/users/chi-tiet?id=${_id}`;
     return axiosClient.get(url);
   },

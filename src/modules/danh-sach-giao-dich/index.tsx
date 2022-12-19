@@ -7,8 +7,6 @@ import './index.css';
 import TableTransaction from './table-giao-dich';
 import DialogTransaction from './table-giao-dich/dialog';
 
-export const TransactionContext = createContext<string>('');
-
 const DanhSachGiaoDichPage = () => {
   const [dialogCreatePYC, setDialogCreatePYC] = useState({open: false});
   return (

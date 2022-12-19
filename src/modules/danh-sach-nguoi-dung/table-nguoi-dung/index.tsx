@@ -2,7 +2,7 @@ import {Box, Card} from '@mui/material';
 import {Edit, Trash} from 'iconsax-react';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useDeleteProduct, useGetAllProduct} from 'src/apis';
+import {useDeleteUser, useGetAllUser} from 'src/apis';
 import {
   DataTable,
   DialogConfirm,
@@ -12,13 +12,13 @@ import {
   SearchBar,
 } from 'src/components/base';
 import {ColumnTableProps} from 'src/components/types';
-import {Product} from 'src/models';
+import {User} from 'src/models';
 import {QueryParams} from 'src/models/common';
 import {colors} from 'src/theme';
 import {formatDatetimeDDMMYYYY} from 'src/utils/format';
-import DialogProduct from './dialog';
+import DialogUser from './dialog';
 
-const TableProduct = () => {
+const TableUser = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<QueryParams>({
     pageNumber: 1,
@@ -27,18 +27,18 @@ const TableProduct = () => {
   });
   const [search, setSearch] = useState<string>('');
 
-  const {data, isLoading, isFetching} = useGetAllProduct({...filters, search});
+  const {data, isLoading, isFetching} = useGetAllUser({...filters, search});
 
-  const [showDialog, setShowDialog] = useState<{open: boolean; data?: Product | null}>({
+  const [showDialog, setShowDialog] = useState<{open: boolean; data?: User | null}>({
     open: false,
     data: null,
   });
-  const [showForm, setShowForm] = useState<{open: boolean; data?: Product | null}>({
+  const [showForm, setShowForm] = useState<{open: boolean; data?: User | null}>({
     open: false,
     data: null,
   });
 
-  const mutationDelete = useDeleteProduct();
+  const mutationDelete = useDeleteUser();
 
   const columns: ColumnTableProps[] = [
     {
@@ -52,13 +52,19 @@ const TableProduct = () => {
     {field: '_id', headerName: 'Mã', type: 'text', width: '200px'},
     {
       field: 'name',
-      headerName: 'Tên sản phẩm',
+      headerName: 'Tên',
       type: 'text',
       width: '200px',
     },
     {
-      field: 'brand',
-      headerName: 'Nhãn hiệu',
+      field: 'address',
+      headerName: 'Địa chỉ',
+      type: 'text',
+      width: '200px',
+    },
+    {
+      field: 'phone',
+      headerName: 'Số điện thoại',
       type: 'text',
       width: '200px',
     },
@@ -77,20 +83,6 @@ const TableProduct = () => {
       width: '100px',
       isSortable: true,
       renderCell: row => formatDatetimeDDMMYYYY(row?.updatedAt),
-    },
-    {
-      field: 'status',
-      headerName: 'Trạng thái',
-      type: 'text',
-      width: '140px',
-      center: true,
-      isSortable: true,
-      renderCell: row =>
-        row?.status ? (
-          <p style={{color: colors.success}}>Active</p>
-        ) : (
-          <p style={{color: colors.error}}>Closed</p>
-        ),
     },
     {
       field: 'thaoTac',
@@ -158,7 +150,7 @@ const TableProduct = () => {
             />
           )}
           {showForm.open && (
-            <DialogProduct
+            <DialogUser
               open={showForm.open}
               onClose={() => setShowForm({data: null, open: false})}
               id={showForm.data?._id || ''}
@@ -172,4 +164,4 @@ const TableProduct = () => {
   );
 };
 
-export default TableProduct;
+export default TableUser;

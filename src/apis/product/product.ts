@@ -7,7 +7,7 @@ export const productApi = {
     const url = '/products/du-lieu';
     return axiosClient.get(url, {params});
   },
-  getOne: (_id: number | string): Promise<Product> => {
+  getOne: (_id: number | string | undefined): Promise<Product> => {
     const url = `/products/chi-tiet?id=${_id}`;
     return axiosClient.get(url);
   },

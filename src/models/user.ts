@@ -4,6 +4,7 @@ export interface User extends TimeStamp {
   address: string;
   name: string;
   phone: string;
+  password: string;
   createdAt: string;
   updatedAt: string;
 }

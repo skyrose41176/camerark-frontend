@@ -15,7 +15,7 @@ export const useGetAllProduct = (filters: QueryParams) => {
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
 };
 
-export const useGetOneProduct = (id: string, onSuccess?: (data: Product) => void) => {
+export const useGetOneProduct = (id: string | undefined, onSuccess?: (data: Product) => void) => {
   const res = useQuery(['chiTietProduct', id], () => productApi.getOne(id), {
     onSuccess: (data: any) => {
       onSuccess && onSuccess(data.data);

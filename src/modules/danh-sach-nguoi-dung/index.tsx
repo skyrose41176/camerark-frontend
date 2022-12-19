@@ -4,40 +4,35 @@ import {ButtonBase} from 'src/components/base';
 import {PageWrapper} from 'src/components/wrapper';
 import Header from '../../layouts/Header';
 import './index.css';
-import TableProduct from './table-san-pham';
-import DialogProduct from './table-san-pham/dialog';
+import TableUser from './table-nguoi-dung';
+import DialogUser from './table-nguoi-dung/dialog';
 
-export const ProductContext = createContext<string>('');
-
-const DanhSachSanPhamPage = () => {
+const DanhSachUserPage = () => {
   const [dialogCreatePYC, setDialogCreatePYC] = useState({open: false});
   return (
     <div>
       <Header
-        title="Danh sách sản phẩm"
+        title="Danh sách người dùng"
         actions={
           <Stack className="txtUppercase">
             <ButtonBase
               variant="outlined"
               color="success"
-              label="Tạo sản phẩm"
+              label="Tạo người dùng"
               onClick={() => setDialogCreatePYC({open: true})}
             />
           </Stack>
         }
       />
       <PageWrapper>
-        <TableProduct />
+        <TableUser />
       </PageWrapper>
 
       {dialogCreatePYC?.open && (
-        <DialogProduct
-          open={dialogCreatePYC.open}
-          onClose={() => setDialogCreatePYC({open: false})}
-        />
+        <DialogUser open={dialogCreatePYC.open} onClose={() => setDialogCreatePYC({open: false})} />
       )}
     </div>
   );
 };
 
-export default DanhSachSanPhamPage;
+export default DanhSachUserPage;

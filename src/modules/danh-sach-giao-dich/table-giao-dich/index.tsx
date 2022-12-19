@@ -49,7 +49,7 @@ const TableTransaction = () => {
       renderCell: (row, index) =>
         (Number(filters?.pageNumber) - 1) * Number(filters?.pageSize) + (index + 1),
     },
-    {field: '_id', headerName: 'Mã', type: 'text', width: '200px'},
+    {field: '_id', headerName: 'Mã', type: 'text', width: '150px'},
     {
       field: 'modelProductId',
       headerName: 'Tên sản phẩm',
@@ -83,6 +83,12 @@ const TableTransaction = () => {
     {
       field: 'profit',
       headerName: 'Lợi nhuận',
+      type: 'text',
+      width: '200px',
+    },
+    {
+      field: 'content',
+      headerName: 'Mô tả',
       type: 'text',
       width: '200px',
     },

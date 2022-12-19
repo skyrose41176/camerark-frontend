@@ -15,7 +15,10 @@ export const useGetAllTransaction = (filters: QueryParams) => {
   return {data: res.data, isLoading: res.isLoading, isFetching: res.isFetching};
 };
 
-export const useGetOneTransaction = (id: string, onSuccess?: (data: Transaction) => void) => {
+export const useGetOneTransaction = (
+  id: string | undefined,
+  onSuccess?: (data: Transaction) => void
+) => {
   const res = useQuery(['chiTietTransaction', id], () => transactionApi.getOne(id), {
     onSuccess: (data: any) => {
       onSuccess && onSuccess(data.data);

@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import {SidebarLeft, SidebarRight} from 'iconsax-react';
+import {Logout, SidebarLeft, SidebarRight} from 'iconsax-react';
 import {FC, useEffect, useMemo, useState} from 'react';
 import {matchPath, useLocation, useNavigate} from 'react-router-dom';
 import {IconButtonBase} from 'src/components/base';
@@ -75,6 +75,18 @@ const Sidebar: FC<Props> = ({onMobileClose, openMobile, onCollapse}) => {
               search={search}
             />
           ))}
+          <NavItem
+            // onClick={() => {
+            //   // dispatch(logout());
+            //   localStorage.removeItem('jwt');
+            //   navigate('/login');
+            // }}
+            item={{
+              href: '/login',
+              icon: Logout,
+              title: 'Đăng xuất',
+            }}
+          />
         </List>
       </Box>
     ),
