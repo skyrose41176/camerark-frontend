@@ -8,7 +8,7 @@ interface Props<T extends FieldValues>
   label: string;
   name: FieldPath<T>;
   form: UseFormReturn<T>;
-  rules?: ControllerProps['rules'];
+  rules?: ControllerProps<T>['rules'];
 }
 
 const TimePickerField = <T extends FieldValues>(props: Props<T>) => {
