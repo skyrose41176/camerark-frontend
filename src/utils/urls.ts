@@ -1,3 +1,3 @@
 export const getAPIBaseUrl = () => {
-  return `http://34.126.181.253/api/`;
+  return `34.136.155.251:443/api/`;
 };
